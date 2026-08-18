@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="画像をブラウザだけでドット絵風に変換できる無料ツール">
+  <title>DOT POP — ドット絵コンバーター</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="DOT POP ホーム">
+      <span class="brand-mark" aria-hidden="true">◆</span>
+      <span>DOT POP</span>
+    </a>
+    <p class="privacy"><span aria-hidden="true">●</span> 画像は外部へ送信されません</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">PIXEL ART CONVERTER</p>
+      <h1>写真を、かわいい<br><span>ドット絵</span>に。</h1>
+      <p class="lead">画像を選んで、好みの色と粗さを選ぶだけ。<br>すべてブラウザの中で変換します。</p>
+    </section>
+
+    <section class="workspace" aria-label="画像変換ツール">
+      <div class="preview-panel">
+        <div id="dropZone" class="drop-zone" tabindex="0" role="button" aria-label="画像を選択またはドロップ">
+          <div id="emptyState" class="empty-state">
+            <div class="upload-icon" aria-hidden="true">↥</div>
+            <h2>画像をここにドロップ</h2>
+            <p>または、下のボタンから選択</p>
+            <button id="selectButton" class="primary-button" type="button">画像を選ぶ</button>
+            <small>JPG・PNG・WebP / 15MBまで</small>
+          </div>
+
+          <div id="canvasStage" class="canvas-stage" hidden>
+            <div class="canvas-frame">
+              <canvas id="outputCanvas" aria-label="変換後の画像"></canvas>
+              <canvas id="originalCanvas" class="original-overlay" aria-label="元の画像"></canvas>
+              <div id="compareLine" class="compare-line" aria-hidden="true"></div>
+            </div>
+            <div class="preview-labels" aria-hidden="true"><span>ORIGINAL</span><span>PIXEL</span></div>
+          </div>
+          <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+        </div>
+
+        <div id="compareControl" class="compare-control" hidden>
+          <label for="compareRange">元画像と比較</label>
+          <input id="compareRange" type="range" min="0" max="100" value="0">
+        </div>
+      </div>
+
+      <aside class="controls-panel" aria-label="変換設定">
+        <div class="control-heading">
+          <div><span class="step">01</span><h2>ドットの粗さ</h2></div>
+          <output id="sizeOutput" for="pixelSize">8 px</output>
+        </div>
+        <input id="pixelSize" class="range" type="range" min="3" max="30" value="8">
+        <div class="range-ends"><span>細かい</span><span>粗い</span></div>
+
+        <hr>
+
+        <div class="control-heading">
+          <div><span class="step">02</span><h2>カラーパレット</h2></div>
+        </div>
+        <div id="paletteGrid" class="palette-grid" role="radiogroup" aria-label="カラーパレット"></div>
+
+        <hr>
+
+        <div class="switch-row">
+          <div><span class="step">03</span><div><h2>ディザリング</h2><p>色の境目をなめらかに表現</p></div></div>
+          <label class="switch"><input id="ditherToggle" type="checkbox"><span></span><span class="sr-only">ディザリングを有効化</span></label>
+        </div>
+
+        <div class="action-grid">
+          <button id="resetButton" class="secondary-button" type="button" disabled>別の画像</button>
+          <button id="downloadButton" class="download-button" type="button" disabled>PNGで保存 <span aria-hidden="true">↓</span></button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite">画像を選ぶと変換が始まります</p>
+      </aside>
+    </section>
+
+    <section class="how-it-works">
+      <p class="eyebrow">HOW IT WORKS</p>
+      <h2>かんたん、3ステップ</h2>
+      <ol>
+        <li><span>1</span><div><h3>画像を選ぶ</h3><p>写真やイラストをドロップ</p></div></li>
+        <li><span>2</span><div><h3>好みに調整</h3><p>粗さ・色・ディザを変更</p></div></li>
+        <li><span>3</span><div><h3>PNGで保存</h3><p>透過画像にも対応</p></div></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer><p>DOT POP <span>◆</span> 画像はあなたの端末内だけで処理されます。</p></footer>
+  <script src="app.js"></script>
+</body>
+</html>
