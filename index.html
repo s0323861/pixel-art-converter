@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="画像をブラウザだけでドット絵風に変換できる無料ツール">
-  <title>DOT POP — ドット絵コンバーター</title>
+  <title>ドット絵変換くん — 画像をドット絵に変換</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="#" aria-label="DOT POP ホーム">
+    <a class="brand" href="#" aria-label="ドット絵変換くん ホーム">
       <span class="brand-mark" aria-hidden="true">◆</span>
-      <span>DOT POP</span>
+      <span>ドット絵変換くん</span>
     </a>
     <p class="privacy"><span aria-hidden="true">●</span> 画像は外部へ送信されません</p>
   </header>
@@ -19,7 +19,7 @@
   <main>
     <section class="hero">
       <p class="eyebrow">PIXEL ART CONVERTER</p>
-      <h1>写真を、かわいい<br><span>ドット絵</span>に。</h1>
+      <h1>写真をかわいい<br><span>ドット絵</span>に。</h1>
       <p class="lead">画像を選んで、好みの色と粗さを選ぶだけ。<br>すべてブラウザの中で変換します。</p>
     </section>
 
@@ -73,9 +73,20 @@
           <label class="switch"><input id="ditherToggle" type="checkbox"><span></span><span class="sr-only">ディザリングを有効化</span></label>
         </div>
 
+        <hr>
+
+        <div class="control-heading">
+          <div><span class="step">04</span><h2>エフェクト</h2></div>
+        </div>
+        <div class="effect-grid">
+          <label class="effect-option"><input id="crtToggle" type="checkbox"><span><b>CRT</b><small>走査線・周辺減光</small></span></label>
+          <label class="effect-option"><input id="glitchToggle" type="checkbox"><span><b>グリッチ</b><small>RGBずれ・ノイズ</small></span></label>
+        </div>
+
         <div class="action-grid">
           <button id="resetButton" class="secondary-button" type="button" disabled>別の画像</button>
           <button id="downloadButton" class="download-button" type="button" disabled>PNGで保存 <span aria-hidden="true">↓</span></button>
+          <button id="videoButton" class="video-button" type="button" disabled>4秒のMP4を保存 <span aria-hidden="true">▶</span></button>
         </div>
         <p id="status" class="status" role="status" aria-live="polite">画像を選ぶと変換が始まります</p>
       </aside>
@@ -92,7 +103,10 @@
     </section>
   </main>
 
-  <footer><p>DOT POP <span>◆</span> 画像はあなたの端末内だけで処理されます。</p></footer>
+  <footer>
+    <p><span>◆</span> ドット絵変換くん <span>◆</span></p>
+    <p class="footer-links"><a href="https://s0323861.github.io/" target="_blank" rel="noopener noreferrer">Akira Mukai</a> | <a href="https://github.com/s0323861/pixel-art-converter" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+  </footer>
   <script src="app.js"></script>
 </body>
 </html>
