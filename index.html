@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="画像をブラウザだけでドット絵風に変換できる無料ツール">
+  <meta name="keywords" content="ドット絵,変換,pixel art,converter">
+  <meta name="author" content="向井聡">
   <title>ドット絵変換くん — 画像をドット絵に変換</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="./favicon.ico">
+  <link rel="stylesheet" href="style.css?v=20260820-4">
 </head>
 <body>
   <header class="site-header">
@@ -34,6 +37,119 @@
             <small>JPG・PNG・WebP / 15MBまで</small>
           </div>
 
+          <div id="canvasStage" class="canvas-stage" hidden>
+            <div class="canvas-frame">
+              <canvas id="outputCanvas" aria-label="変換後の画像"></canvas>
+              <canvas id="originalCanvas" class="original-overlay" aria-label="元の画像"></canvas>
+              <div id="compareLine" class="compare-line" aria-hidden="true"></div>
+              <button id="zoomButton" class="zoom-button" type="button" aria-haspopup="dialog">拡大表示 ↗</button>
+            </div>
+            <div class="preview-labels" aria-hidden="true"><span>ORIGINAL</span><span>PIXEL</span></div>
+          </div>
+          <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+        </div>
+
+        <div id="compareControl" class="compare-control" hidden>
+          <label for="compareRange">元画像と比較</label>
+          <input id="compareRange" type="range" min="0" max="100" value="0">
+        </div>
+      </div>
+
+      <aside class="controls-panel" aria-label="変換設定">
+        <div class="control-heading">
+          <div><span class="step">01</span><h2>ドットの粗さ</h2></div>
+          <output id="sizeOutput" for="pixelSize">8 px</output>
+        </div>
+        <input id="pixelSize" class="range" type="range" min="3" max="30" value="8">
+        <div class="range-ends"><span>細かい</span><span>粗い</span></div>
+
+        <hr>
+
+        <div class="control-heading">
+          <div><span class="step">02</span><h2>カラーパレット</h2></div>
+        </div>
+        <div id="paletteGrid" class="palette-grid" role="radiogroup" aria-label="カラーパレット"></div>
+
+        <hr>
+
+        <div class="switch-row">
+          <div><span class="step">03</span><div><h2>ディザリング</h2><p>色の境目をなめらかに表現</p></div></div>
+          <label class="switch"><input id="ditherToggle" type="checkbox"><span></span><span class="sr-only">ディザリングを有効化</span></label>
+        </div>
+
+        <hr>
+
+        <div class="control-heading">
+          <div><span class="step">04</span><h2>エフェクト</h2></div>
+        </div>
+        <div class="effect-grid">
+          <label class="effect-option"><input id="crtToggle" type="checkbox"><span><b>CRT</b><small>走査線・周辺減光</small></span></label>
+          <label class="effect-option"><input id="glitchToggle" type="checkbox"><span><b>グリッチ</b><small>RGBずれ・ノイズ</small></span></label>
+        </div>
+
+        <div class="action-grid">
+          <button id="resetButton" class="secondary-button" type="button" disabled>別の画像</button>
+          <div class="download-group">
+            <label for="downloadScale">保存サイズ</label>
+            <select id="downloadScale" aria-label="PNG保存サイズ">
+              <option value="1">原寸</option>
+              <option value="2">2倍</option>
+              <option value="4">4倍</option>
+            </select>
+            <button id="downloadButton" class="download-button" type="button" disabled>PNGで保存 <span aria-hidden="true">↓</span></button>
+          </div>
+          <button id="videoButton" class="video-button" type="button" disabled>4秒のMP4を保存 <span aria-hidden="true">▶</span></button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite">画像を選ぶと変換が始まります</p>
+      </aside>
+    </section>
+
+    <div id="zoomModal" class="zoom-modal" role="dialog" aria-modal="true" aria-labelledby="zoomTitle" hidden>
+      <div class="zoom-dialog">
+        <div class="zoom-header">
+          <h2 id="zoomTitle">拡大プレビュー</h2>
+          <button id="zoomCloseButton" class="zoom-close-button" type="button" aria-label="拡大表示を閉じる">×</button>
+        </div>
+        <div id="zoomViewport" class="zoom-viewport" aria-label="拡大画像。高倍率時はドラッグして移動できます">
+          <div id="zoomCanvasFrame" class="zoom-canvas-frame">
+            <canvas id="zoomCanvas" aria-label="拡大した変換後の画像"></canvas>
+            <canvas id="zoomOriginalCanvas" class="zoom-original-overlay" aria-label="拡大した元の画像"></canvas>
+            <div id="zoomCompareLine" class="zoom-compare-line" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="zoom-compare-control">
+          <label for="zoomCompareRange">元画像と比較</label>
+          <input id="zoomCompareRange" type="range" min="0" max="100" value="0">
+          <span aria-hidden="true">ORIGINAL</span>
+        </div>
+        <div class="zoom-controls" aria-label="表示倍率の調整">
+          <button id="zoomOutButton" type="button" aria-label="縮小">−</button>
+          <input id="zoomRange" type="range" min="25" max="400" step="25" value="100" aria-label="表示倍率">
+          <button id="zoomInButton" type="button" aria-label="拡大">＋</button>
+          <output id="zoomOutput" for="zoomRange">100%</output>
+          <button id="zoomFitButton" type="button">画面に合わせる</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="how-it-works">
+      <p class="eyebrow">HOW IT WORKS</p>
+      <h2>かんたん 3ステップ</h2>
+      <ol>
+        <li><span>1</span><div><h3>画像を選ぶ</h3><p>写真やイラストをドロップ</p></div></li>
+        <li><span>2</span><div><h3>好みに調整</h3><p>粗さ・色・ディザを変更</p></div></li>
+        <li><span>3</span><div><h3>PNGで保存</h3><p>透過画像にも対応</p></div></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p><span>◆</span> ドット絵変換くん <span>◆</span></p>
+    <p class="footer-links"><a href="https://s0323861.github.io/" target="_blank" rel="noopener noreferrer">Akira Mukai</a> | <a href="https://github.com/s0323861/pixel-art-converter" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+  </footer>
+  <script src="app.js?v=20260820-4"></script>
+</body>
+</html>
           <div id="canvasStage" class="canvas-stage" hidden>
             <div class="canvas-frame">
               <canvas id="outputCanvas" aria-label="変換後の画像"></canvas>
